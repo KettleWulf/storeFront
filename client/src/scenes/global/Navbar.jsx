@@ -1,16 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Badge, Box, IconButton } from "@mui/material";
-import {
-	PersonOutline,
-	ShoppingBagOutLined,
-	MenuOutlined,
-	SearchOutlined,
-} from "@mui/icons-material";
-import { useNagivate, useNavigate } from "react-router-dom";
+import { MenuOutlined, SearchOutlined } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 import { shades } from "../../theme";
 import { setIsCartOpen } from "../../state";
+import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
+import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 
-const Navbar = () => {
+function Navbar() {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const cart = useSelector((state) => state.cart.cart);
@@ -37,10 +34,10 @@ const Navbar = () => {
 			>
 				<Box
 					onClick={() => navigate("/")}
-					sx={{ "&:hover": { cursor: "pointer " } }}
+					sx={{ "&:hover": { cursor: "pointer" } }}
 					color={shades.secondary[500]}
 				>
-					storeFront
+					ECOMMER
 				</Box>
 				<Box
 					display="flex"
@@ -51,11 +48,9 @@ const Navbar = () => {
 					<IconButton sx={{ color: "black" }}>
 						<SearchOutlined />
 					</IconButton>
-
 					<IconButton sx={{ color: "black" }}>
-						<PersonOutline />
+						<PersonOutlineOutlinedIcon />
 					</IconButton>
-
 					<Badge
 						badgeContent={cart.length}
 						color="secondary"
@@ -74,10 +69,9 @@ const Navbar = () => {
 							onClick={() => dispatch(setIsCartOpen({}))}
 							sx={{ color: "black" }}
 						>
-							<ShoppingBagOutLined />
+							<ShoppingBagOutlinedIcon />
 						</IconButton>
 					</Badge>
-
 					<IconButton sx={{ color: "black" }}>
 						<MenuOutlined />
 					</IconButton>
@@ -85,6 +79,6 @@ const Navbar = () => {
 			</Box>
 		</Box>
 	);
-};
+}
 
 export default Navbar;
