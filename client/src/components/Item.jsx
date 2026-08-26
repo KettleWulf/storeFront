@@ -1,34 +1,29 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { IconButton, Box, Typography, useTheme, Button } from "@mui/material";
-import AddIcon from "@mui/material/Add";
-import RemoveIcon from "@mui/material/Remove";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 import { shades } from "../theme";
-import { useNavigate } from "react-router-dom";
 import { addToCart } from "../state";
+import { useNavigate } from "react-router-dom";
+import { getItemImageUrl } from "../utils/strapi";
 
 const Item = ({ item, width }) => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-
 	const [count, setCount] = useState(1);
 	const [isHovered, setIsHovered] = useState(false);
-
 	const {
 		palette: { neutral },
 	} = useTheme();
 
-	const { category, price, name, image } = item.attributes;
-
-	const {
-		data: {
-			attributes: {
-				formats: {
-					medium: { url },
-				},
-			},
-		},
-	} = image;
+	const { category, price, name, image } = item;
+	const imageUrl = getItemImageUrl(image);
+	const formattedCategory = category
+		? category
+				.replace(/([A-Z])/g, " $1")
+				.replace(/^./, (str) => str.toUpperCase())
+		: "";
 
 	return (
 		<Box width={width}>
@@ -38,20 +33,20 @@ const Item = ({ item, width }) => {
 				onMouseOut={() => setIsHovered(false)}
 			>
 				<img
-					alt={item.name}
+					alt={name}
 					width="300px"
 					height="400px"
-					src={`http://localhost:1337${url}`}
+					src={imageUrl}
 					onClick={() => navigate(`/item/${item.id}`)}
 					style={{ cursor: "pointer" }}
 				/>
 				<Box
-					display={isHovered ? "blocked" : "none"}
+					display={isHovered ? "block" : "none"}
 					position="absolute"
 					bottom="10%"
 					left="0"
 					width="100%"
-					p="0 5%"
+					padding="0 5%"
 				>
 					<Box display="flex" justifyContent="space-between">
 						<Box
@@ -64,13 +59,14 @@ const Item = ({ item, width }) => {
 								<RemoveIcon />
 							</IconButton>
 							<Typography color={shades.primary[300]}>{count}</Typography>
-							<IconButton onClick={() => setCount(Math.max(count - 1, 1))}>
+							<IconButton onClick={() => setCount(count + 1)}>
 								<AddIcon />
 							</IconButton>
 						</Box>
-
 						<Button
-							oncClick={() => dispatch(addToCart({ item: { ...item, count } }))}
+							onClick={() => {
+								dispatch(addToCart({ item: { ...item, count } }));
+							}}
 							sx={{ backgroundColor: shades.primary[300], color: "white" }}
 						>
 							Add to Cart
@@ -81,9 +77,7 @@ const Item = ({ item, width }) => {
 
 			<Box mt="3px">
 				<Typography variant="subtitle2" color={neutral.dark}>
-					{category
-						.replace(/[A-Z])/g, " $1")
-						.replace(/^./, (str) => str.toUppeCase())}
+					{formattedCategory}
 				</Typography>
 				<Typography>{name}</Typography>
 				<Typography fontWeight="bold">${price}</Typography>
