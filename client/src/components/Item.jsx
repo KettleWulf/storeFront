@@ -37,7 +37,7 @@ const Item = ({ item, width }) => {
 					width="300px"
 					height="400px"
 					src={imageUrl}
-					onClick={() => navigate(`/item/${item.id}`)}
+					onClick={() => navigate(`/item/${item.documentId}`)}
 					style={{ cursor: "pointer" }}
 				/>
 				<Box
